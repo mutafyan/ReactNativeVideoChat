@@ -1,79 +1,151 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Getting Started
+# React Native Video Chat App
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Overview
 
-## Step 1: Start the Metro Server
+This project is a React Native application that provides a video chat functionality using the WebRTC protocol. The app allows users to initiate and receive video calls over a peer-to-peer connection. It uses a WebSocket server for signaling between peers and manages audio and video streams locally on the device.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Features
 
-To start Metro, run the following command from the _root_ of your React Native project:
+- **Real-time Video Communication**: Establishes a peer-to-peer connection for video calls.
+- **WebSocket Signaling**: Uses WebSocket for signaling between peers to manage the WebRTC connection.
+- **In-Call Management**: Manages audio routes and call states during a video chat.
+- **Start/Stop Local Stream**: Allows users to start and stop their local video stream.
+- **Offer/Answer Mechanism**: Handles WebRTC offer/answer exchange for connection setup.
+- **ICE Candidate Handling**: Manages ICE candidates for establishing the best possible connection path.
 
-```bash
-# using npm
-npm start
+## Prerequisites
 
-# OR using Yarn
-yarn start
-```
+Before you start, ensure you have the following installed:
 
-## Step 2: Start your Application
+- Node.js (version 18 or higher)
+- React Native CLI
+- Android Studio and/or Xcode (for iOS development)
+- A WebSocket server for signaling (details to be replaced with your server setup)
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+## Getting Started
 
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
+### 1. Clone the Repository
 
 ```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+git clone https://github.com/yourusername/react-native-video-chat.git
+cd react-native-video-chat
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+### 2. Install Dependencies
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+```bash
+yarn add
+```
 
-## Step 3: Modifying your App
+### 3. Configure Environment Variables
 
-Now that you have successfully run the app, let's modify it.
+Replace the placeholder values in `VideoChat.js` with your actual credentials:
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+```javascript
+const token = 'YOUR_JWT_TOKEN';          // Replace with your JWT token
+const recipientUserId = 'RECIPIENT USER ID'; // Replace with the recipient user ID
+const userId = 'YOUR ID';                // Replace with your actual user ID
+const host = 'YOUR HOST';                // Replace with your WebSocket server host
+```
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+### 4. Run the Application
 
-## Congratulations! :tada:
+To run the app on an Android or iOS device/emulator:
 
-You've successfully run and modified your React Native App. :partying_face:
+```bash
+npx react-native run-android  // For Android
+npx react-native run-ios      // For iOS
+```
 
-### Now what?
+## Project Structure
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+- `App.js`: The entry point of the application which renders the `VideoChat` component.
+- `src/screens/VideoChat.js`: The main component handling the video chat functionality, including local and remote stream management and WebRTC connection setup.
 
-# Troubleshooting
+### `App.js`
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+```javascript
+import React from 'react';
+import VideoChat from './src/screens/VideoChat';
 
-# Learn More
+const App = () => {
+  return <VideoChat />;
+};
 
-To learn more about React Native, take a look at the following resources:
+export default App;
+```
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+### `VideoChat.js`
+
+The `VideoChat.js` component is responsible for setting up and managing the video chat. It handles:
+
+- **Local Stream Initialization**: Acquiring the local media stream using `getUserMedia`.
+- **WebSocket Connection**: Establishing a WebSocket connection for signaling.
+- **Peer Connection Setup**: Setting up the `RTCPeerConnection` for WebRTC communication.
+- **Offer/Answer Handling**: Managing the offer/answer exchange to establish the connection.
+- **ICE Candidate Handling**: Adding ICE candidates to facilitate the connection.
+- **Stream Management**: Displaying the local and remote streams using `RTCView`.
+
+### Main Functions
+
+- **startLocalStream**: Initializes the local video stream.
+- **setupWebSocket**: Establishes and manages the WebSocket connection.
+- **setupPeerConnection**: Sets up the WebRTC peer connection and handles the media tracks.
+- **createOffer**: Creates an offer to start the WebRTC connection.
+- **handleOffer**: Handles the received offer and sends an answer.
+- **handleAnswer**: Processes the received answer.
+- **handleCandidate**: Adds received ICE candidates to the connection.
+- **stopLocalStream**: Stops the local video stream.
+
+### Example Usage
+
+The app can be used to start a local video stream and create an offer for a video call. Buttons are provided to control these actions:
+
+- **Start Video**: Initializes the local stream.
+- **Create Offer**: Creates an offer to connect with another peer.
+- **Stop Video**: Stops the local video stream.
+
+### Styling
+
+Basic styles are applied to position and size the video streams and buttons within the app:
+
+```javascript
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  stream: {
+    width: '100%',
+    height: '40%',
+    backgroundColor: 'gray',
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 20,
+  },
+});
+```
+
+## Dependencies
+
+- **react-native-webrtc**: Provides WebRTC support in React Native.
+- **react-native-incall-manager**: Manages audio routing and call states during an active call.
+
+## Troubleshooting
+
+If you encounter any issues, consider the following:
+
+- Ensure your WebSocket server is running and accessible.
+- Verify that the STUN/TURN servers are correctly configured.
+- Check for permission issues related to accessing the camera and microphone.
+
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request with your improvements.
